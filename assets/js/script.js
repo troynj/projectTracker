@@ -4,7 +4,9 @@ function writeList(data) {
 
 function readList() {
 	let data = localStorage.getItem("projects");
-	return data === null ? [] : JSON.parse(data);
+	return data === null
+		? [{ name: "test", type: "World", dueDate: "1-2-3" }]
+		: JSON.parse(data);
 }
 
 function updateList() {
@@ -26,5 +28,12 @@ function updateList() {
 		table.append(makeRow(project.name, project.type, project.dueDate, index));
 	});
 }
-$("#table").on("click", "*[data-field]", (e) => {});
+$("#table").on("click", "*[data-field]", (e) => {
+	const index = Number($(e.target).attr("data-field") || -1);
+	if (index === -1) return;
+	const projects = readList();
+	projects.splice(index, 1);
+	writeList(projects);
+	updateList();
+});
 updateList();
