@@ -1,3 +1,46 @@
+$("#create-project-btn").click(() => {
+	var modalContentEl = $('#modal-content')
+	$('#myModal').css("display", "block")
+	modalContentEl.append($('<p>').text('Project Name').css('font-weight', 'bold'))
+	modalContentEl.append($('<input>').attr("id", "ui-name"))
+	modalContentEl.append($('<p>').text('Project Type').css('font-weight', 'bold'))
+	modalContentEl.append($('<input>').attr("id", "ui-type"))
+	modalContentEl.append($('<p>').text('Due Date').css('font-weight', 'bold'))
+	modalContentEl.append($('<input>').attr("id", "ui-date"))
+
+	var cancelBtnEl = $('<button>').attr("id", "cancel-btn")
+	cancelBtnEl.click(() => {
+		$('#myModal input').val("")
+    closeModal()
+	})
+	modalContentEl.append(cancelBtnEl.text("Cancel"))
+
+	var addBtnEl = $('<button>').attr("id", "add-btn")
+	addBtnEl.click(() => {
+		var tempName = $("#ui-name").val()
+		var tempType = $("#ui-type").val()
+		var tempDate = $("#ui-date").val()
+    var tempData = readList()
+    tempData.push({ name: tempName, type: tempType, dueDate: tempDate })
+
+    console.log("hello")
+writeList(tempData)
+updateList()
+closeModal()
+
+	})
+
+	modalContentEl.append(addBtnEl.text("Add Project"))
+
+
+})
+
+function closeModal() {
+  $('#myModal').css("display", "none")
+  $('#modal-content').empty()
+
+}
+
 function displayClock() {
   setInterval(function () {
     var unix = dayjs().unix();
@@ -18,6 +61,7 @@ function readList() {
 }
 
 function updateList() {
+
   function makeRow(name, type, date, index) {
     const row = $("<tr>");
     row.append($("<td>" + name + "</td>"));
@@ -28,6 +72,7 @@ function updateList() {
     row.append($("<td>").append(button));
     return row;
   }
+  
   const data = readList();
   console.log({ data });
   let table = $("#table-content");
